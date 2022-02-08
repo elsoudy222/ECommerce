@@ -9,6 +9,9 @@ import 'module/login/login_screen.dart';
 import 'module/onBoarding/on_boarding_screen.dart';
 import 'shared/components/themes.dart';
 
+
+//// SoudyJr ..........
+
 void main() async{
   // Bloc.observer = MyBlocObserver();
   WidgetsFlutterBinding.ensureInitialized();
