@@ -12,7 +12,7 @@ class SettingsScreen extends StatelessWidget {
   var nameController = TextEditingController();
   var emailController = TextEditingController();
   var phoneController = TextEditingController();
-
+  var formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -34,64 +34,78 @@ class SettingsScreen extends StatelessWidget {
           builder:(context)=> Scaffold(
             body: Padding(
               padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    maxRadius: 70.0,
-                    backgroundColor: Colors.transparent,
-                    child: Image(
-                      image: NetworkImage(model.data.image),
+              child: Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    if(state is SuccessLoadingUpdateUserState)
+                    LinearProgressIndicator(),
+                    SizedBox(height: 20.0,),
+                    CircleAvatar(
+                      maxRadius: 70.0,
+                      backgroundColor: Colors.transparent,
+                      child: Image(
+                        image: NetworkImage(model.data.image),
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 20.0,),
-                  defaultFormField(
-                    controller: nameController,
-                    keyboardType: TextInputType.name,
-                    validate: (String value) {
-                      if (value.isEmpty) {
-                        return "Name must not be empty";
-                      }
-                      return null;
-                    },
-                    label: "Name",
-                    prefix: Icons.person,
-                  ),
-                  SizedBox(height: 20.0,),
-                  defaultFormField(
-                    controller: emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    validate: (String value) {
-                      if (value.isEmpty) {
-                        return "Email must not be empty";
-                      }
-                      return null;
-                    },
-                    label: "Email",
-                    prefix: Icons.email,
-                  ),
-                  SizedBox(height: 20.0,),
-                  defaultFormField(
-                    controller: phoneController,
-                    keyboardType: TextInputType.phone,
-                    validate: (String value) {
-                      if (value.isEmpty) {
-                        return "Phone must not be empty";
-                      }
-                      return null;
-                    },
-                    label: "Phone",
-                    prefix: Icons.phone,
-                  ),
-                  SizedBox(height: 20.0,),
-                  defaultButton(function: (){
-                    signOut(context);
-                  }, text: "signout"),
-                  SizedBox(height: 20.0,),
-                  defaultButton(function: (){
-                    signOut(context);
-                  }, text: "signout"),
+                    SizedBox(height: 20.0,),
+                    defaultFormField(
+                      controller: nameController,
+                      keyboardType: TextInputType.name,
+                      validate: (String value) {
+                        if (value.isEmpty) {
+                          return "Name must not be empty";
+                        }
+                        return null;
+                      },
+                      label: "Name",
+                      prefix: Icons.person,
+                    ),
+                    SizedBox(height: 20.0,),
+                    defaultFormField(
+                      controller: emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      validate: (String value) {
+                        if (value.isEmpty) {
+                          return "Email must not be empty";
+                        }
+                        return null;
+                      },
+                      label: "Email",
+                      prefix: Icons.email,
+                    ),
+                    SizedBox(height: 20.0,),
+                    defaultFormField(
+                      controller: phoneController,
+                      keyboardType: TextInputType.phone,
+                      validate: (String value) {
+                        if (value.isEmpty) {
+                          return "Phone must not be empty";
+                        }
+                        return null;
+                      },
+                      label: "Phone",
+                      prefix: Icons.phone,
+                    ),
+                    SizedBox(height: 20.0,),
+                    defaultButton(
+                        function: (){
+                          if(formKey.currentState.validate()){
+                            HomeCubit.get(context).updateUserData(
+                              name: nameController.text,
+                              email: emailController.text,
+                              phone: phoneController.text,
+                            );
+                          }
 
-                ],
+                    }, text: "update"),
+                    SizedBox(height: 20.0,),
+                    defaultButton(function: (){
+                      signOut(context);
+                    }, text: "signout"),
+
+                  ],
+                ),
               ),
             ),
           ),

@@ -1,3 +1,5 @@
+import 'package:ecommerce/layout/cubit/home_cubit.dart';
+import 'package:ecommerce/model/favorites_model.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -127,7 +129,103 @@ Color chooseToastColor(ToastStates toastStates){
 }
 
 
-
+Widget buildListProduct(
+     model,
+    context,
+    {bool isOldPrice = true}
+    ) =>
+    Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Container(
+        height: 120.0,
+        child: Row(
+          children: [
+            Stack(
+              alignment: AlignmentDirectional.bottomStart,
+              children: [
+                Image(
+                  image: NetworkImage(model.image),
+                  width: 120.0,
+                  height: 120.0,
+                  //fit: BoxFit.cover,
+                ),
+                if (model.discount != 0 && isOldPrice)
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0),
+                    color: Colors.red,
+                    child: Text(
+                      "DISCOUNT",
+                      style: TextStyle(
+                        fontSize: 10.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            SizedBox(
+              width: 20.0,
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    model.name,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 14.0, height: 1.3),
+                  ),
+                  Spacer(),
+                  Row(
+                    children: [
+                      Text(
+                        model.price.toString(),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 12.0, color: primaryColor),
+                      ),
+                      SizedBox(
+                        width: 10.0,
+                      ),
+                      if (model.discount != 0 && isOldPrice)
+                        Text(
+                          model.oldPrice.toString(),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontSize: 10.0,
+                              color: Colors.grey,
+                              decoration: TextDecoration.lineThrough),
+                        ),
+                      Spacer(),
+                      IconButton(
+                        onPressed: () {
+                          HomeCubit.get(context)
+                              .changeFavorites(model.id);
+                        },
+                        icon: CircleAvatar(
+                          backgroundColor: HomeCubit.get(context)
+                              .favorites[model.id]
+                              ? primaryColor
+                              : Colors.grey,
+                          radius: 15.0,
+                          child: Icon(
+                            Icons.favorite_border,
+                            size: 14.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
 
 // Logout Button:-
 // TextButton(
