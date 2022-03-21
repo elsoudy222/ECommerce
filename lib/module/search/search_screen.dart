@@ -48,7 +48,7 @@ class SearchScreen extends StatelessWidget {
                     Expanded(
                       child: ListView.separated(
                         physics: BouncingScrollPhysics(),
-                        itemBuilder: (context, index) => buildListProduct(
+                         itemBuilder: (context, index) => buildListProduct(
                             SearchCubit.get(context).model.data.data[index],
                           context,
                           isOldPrice: false
